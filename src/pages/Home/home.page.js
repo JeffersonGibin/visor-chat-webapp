@@ -50,10 +50,6 @@ export function HomePage() {
 
   }, [statusResponseSocket]);
 
-  useEffect(() => {
-    window.scrollTo(document.body.scrollHeight, 0);
-  }, [messages]);
-
   // Send Message
   const sendMessage = () => {
 
@@ -71,7 +67,7 @@ export function HomePage() {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !waitResponseSocket && text.length > 4) {
       sendMessage();
     }
   };
