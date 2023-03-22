@@ -65,7 +65,7 @@ export function SignInPage(e) {
         <Input
           type="email"
           placeholder="Your email here"
-          autoFocus
+          autoFocus={true}
           value={email}
           onChange={(e) => [setEmail(e.target.value), setMessage(""), setError(false)]}
         />

@@ -7,7 +7,7 @@ export const Toast = styled.div`
   font-weight: 700;
 
   &.success {
-    background: #2ecc71;
+    background: #6ec56e;
   }
   &.warning {
     background: #ed991d;

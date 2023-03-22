@@ -36,7 +36,6 @@ export const Header = styled.div`
   border-radius: 5px 5px 0px 0px;
   height: 100px;
   background: #1d3345;
-  margin-top: 20px;
 `;
 
 export const Welcome = styled.div`
@@ -47,10 +46,24 @@ export const Welcome = styled.div`
 `;
 export const Logout = styled.div`
   margin-right: 20px;
+
+  & button {
+    color: #ffffff;
+    border-radius: 5px;
+    border: none;
+    background: #c56e6e;
+    font-size: 12px;
+    padding: 5px;
+    margin-right: 20px;
+    min-width: 52px;
+    text-decoration: underline white;
+  }
+
   & a {
     color: #fff;
   }
 `;
+
 export const ContentHeaderLeft = styled.div`
   display: flex;
   width: 50%;
@@ -94,6 +107,19 @@ export const Message = styled.div`
     props.position === "left" ? "25px 15px 20px 0px" : "15px 25px 0px 20px"};
   color: ${(props) => (props.position === "left" ? "#1d3345" : "#ffffff")};
 
+  animation: fadeInAnimation ease 2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   & div {
     word-wrap: break-word;
     width: 13em;
@@ -109,7 +135,8 @@ export const Message = styled.div`
     justify-content: flex-end;
     align-items: flex-end;
     font-weight: bold;
-    color: #2a3d4c;
+    font-size: 12px;
+    color: #fff;
   }
 `;
 
@@ -121,11 +148,13 @@ export const Footer = styled.div`
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
-  padding: 5px;
+  margin-bottom: 15px;
+
   & button {
     width: 115px;
     height: 60px;
   }
+
   & input {
     outline: none;
     padding: 16px 0px;
@@ -148,10 +177,11 @@ export const Display = styled.div`
   background-color: #fff;
   max-width: 1024px;
   overflow-y: auto;
-  min-height: 400px;
+  min-height: 590px;
+  height: 100%;
   padding-top: 20px;
-  max-height: 600px;
   padding-bottom: 40px;
+  border-bottom: none;
 `;
 
 export const Content = styled.div`

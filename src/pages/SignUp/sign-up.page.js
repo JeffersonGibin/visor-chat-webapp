@@ -66,6 +66,7 @@ export function SignUpPage() {
           type="text"
           placeholder="Your name here"
           value={name}
+          autoFocus={true}
           onChange={(e) => setName(e.target.value)}
         />
         <Input

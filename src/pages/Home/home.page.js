@@ -85,13 +85,13 @@ export function HomePage() {
             <div>{isOnlineSocket ? "Online" : "Offiline"}</div>
           </C.ServerStatus>
         </C.ContentHeaderLeft>
-
+      
         <C.ContentHeaderRight>
           <C.Welcome>
             <span>Hello, {session.name}</span>
           </C.Welcome>
           <C.Logout>
-            <button onClick={() => logoff()}>Leave</button>
+            <button onClick={() => logoff()}>Log out</button>
           </C.Logout>
         </C.ContentHeaderRight>
       </C.Header>
