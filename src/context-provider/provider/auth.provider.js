@@ -9,12 +9,12 @@ export const AuthProvider = ({ children }) => {
   const instanceConfig = new Config();
   
   const session = JSON.parse(localStorage.getItem("session"));
-  console.log("AAAAAAAAAAAAAAAAAAAAAAA", session)
   const currentPage = location.pathname;
 
   const whenTokenExistsRedirectTo = useCallback(
     (toPage) => {
-      const routes = ["/sign-in", "/sign-up"];
+      const routes = ["/sign-in", "/sign-up", "/"];
+
       if (session?.token != null && routes.includes(currentPage)) {
         console.info(
           `You were redirected to home because is in the ----> ${currentPage}`
