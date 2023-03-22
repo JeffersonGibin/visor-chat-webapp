@@ -24,6 +24,8 @@ export function SignInPage(e) {
     }
   };
 
+ 
+
   const handleLogin = async () => {
     if (!email | !password) {
       setMessage("All fields required!");
@@ -46,9 +48,13 @@ export function SignInPage(e) {
       setError(true)
       setLoading(false);
       setMessage(e.message);
-    });
+    });  
+  };
 
-
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
   };
 
   return (
@@ -68,6 +74,7 @@ export function SignInPage(e) {
           placeholder="Your password here"
           value={password}
           onChange={(e) => [setPassword(e.target.value), setMessage(""), setError(false)]}
+          onKeyPress={handleKeyPress}
         />
         <Button Text="Login" type="submit" onClick={handleLogin} isLoading={loading}/>
         <C.LabelSignup>

@@ -51,6 +51,12 @@ export function SignUpPage() {
       });
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleCreateAccount();
+    }
+  };
+
   return (
     <C.Container>
       <C.Label>Register now is free :)</C.Label>
@@ -73,6 +79,7 @@ export function SignUpPage() {
           placeholder="Your password here"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <Button
           Text="Create Account"
