@@ -1,24 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getTime } from "./time.js";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import * as C from "./styles";
+import Toast from "../../components/Toast";
+
+import * as C from "./styles.js";
 import { useChat, useAuth } from "../../hooks";
 
 export function HomePage() {
+  const [text, setText] = useState("");
   const { getSession, logoff } = useAuth();
-  const { isOnline, waitResponse, messageStatus, message, sendMessage } =
-    useChat();
+  const [error, setError] = useState("");
+  const [messages, setMessageInList] = useState([]);
 
+  const {
+    isOnlineSocket,
+    waitResponseSocket,
+    responseMessageAISocket,
+    sendMesseToAI,
+    statusResponseSocket,
+  } = useChat();
   const session = getSession();
 
-  return (
+  // Effect When message is change
+  useEffect(() => {
+    if (responseMessageAISocket) {
+      setMessageInList(
+        messages.concat([
+          {
+            text:
+              responseMessageAISocket.message.text ??
+              "I am not response now. =/",
+            date: new Date().toISOString(),
+            who: "AI",
+          },
+        ])
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [responseMessageAISocket]);
 
+  // When status is error
+  useEffect(() => {
+    if (statusResponseSocket === "Error") {
+      setError("The server is loaded. try again!");
+      setTimeout(() => {setError("")}, 4000);
+    }
+
+  }, [statusResponseSocket]);
+
+  useEffect(() => {
+    window.scrollTo(document.body.scrollHeight, 0);
+  }, [messages]);
+
+  // Send Message
+  const sendMessage = () => {
+
+    setText(""); // Clear field
+    sendMesseToAI(text);
+    setMessageInList(
+      messages.concat([
+        {
+          text,
+          date: new Date().toISOString(),
+          who: "USER",
+        },
+      ])
+    );
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  return (
     <C.Container>
       <C.Header>
         <C.ContentHeaderLeft>
           <C.ServerStatus>
-            <C.CicleOnline status={isOnline} />
-            <div>{isOnline ? "Online" : "Offiline"}</div>
+            <C.CicleOnline status={isOnlineSocket} />
+            <div>{isOnlineSocket ? "Online" : "Offiline"}</div>
           </C.ServerStatus>
         </C.ContentHeaderLeft>
 
@@ -33,30 +97,35 @@ export function HomePage() {
       </C.Header>
 
       <C.Display>
-        {/* <C.MessageResponse>Olá</C.MessageResponse> */}
-        <C.Message position={"left"}>
-          <div>
-            teste
-            321 321 321 3 21 32 13 3 213 21 3 1312 Olá
-          </div>
-          <span>02:39</span>
-        </C.Message>
-        <C.Message position={"rith"}>
-          <div>
-            teste
-          </div>
-          <span>02:39</span>
-        </C.Message>
+        {messages.map((item, index) => (
+          <C.Message
+            key={index}
+            position={item.who === "AI" ? "left" : "right"}
+          >
+            <div>{item.text}</div>
+            <span>{getTime(item.date)}</span>
+          </C.Message>
+        ))}
       </C.Display>
+
+      {error && <Toast text={error  } className="error" />}
 
       <C.Footer>
         <Input
           type="text"
           placeholder="Write your message"
-          value={""}
-          onChange={(e) => {}}
+          value={text}
+          autoFocus={true}
+          // disabled={!isOnline}
+          onChange={(e) => setText(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
-        <Button Text="Send" onClick={() => {}} isLoading={waitResponse} />
+        <Button
+          Text="Send"
+          onClick={sendMessage}
+          isLoading={waitResponseSocket}
+          disabled={!isOnlineSocket}
+        />
       </C.Footer>
     </C.Container>
   );

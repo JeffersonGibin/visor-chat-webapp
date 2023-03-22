@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
-
   outline: none;
   border: none;
   border-radius: 5px;
@@ -13,8 +12,13 @@ export const Button = styled.button`
   font-weight: 600;
   font-size: 16px;
   max-width: 350px;
-`;
 
+  &:disabled {
+    background: #CCC;
+    border: 5px solid #CCC;
+    cursor: not-allowed;
+  }
+`;
 
 export const Text = styled.div`
   padding: 16px 20px;

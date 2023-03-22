@@ -78,16 +78,21 @@ export const MessageResponse = styled.div`
   text-align: left;
 `;
 export const Message = styled.div`
+  margin: 10px;
   display: flex;
+  font-size: 15px;
+  max-width: 500px;
+
   align-self: ${(props) =>
     props.position === "left" ? "flex-start" : "flex-end"};
+
   background: ${(props) => (props.position === "left" ? "#f3f6f6" : "#5e8c8c")};
+
   padding: ${(props) => (props.position === "left" ? "10px 40px" : "10px")};
-  border-radius: 15px 55px 0px;
-  margin: 10px;
-  font-size: 15px;
+
+  border-radius: ${(props) =>
+    props.position === "left" ? "25px 15px 20px 0px" : "15px 25px 0px 20px"};
   color: ${(props) => (props.position === "left" ? "#1d3345" : "#ffffff")};
-  max-width: 500px;
 
   & div {
     word-wrap: break-word;
