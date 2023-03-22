@@ -3,7 +3,7 @@
 This repository is the front-end of a chat that was developed to participate in the Visor.ai selection process. For more information about the project, [visit here](https://github.com/JeffersonGibin/visor-challenge)
 
 
-## Available Scripts
+## Getting Started
 
 In the project directory, you can run:
 
