@@ -51,6 +51,13 @@ export function SignInPage(e) {
 
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log("TESTE")
+      // handleLogin()
+    }
+  }
+
   return (
     <C.Container>
       <C.Label>Welcome again :)</C.Label>
@@ -59,6 +66,7 @@ export function SignInPage(e) {
         <Input
           type="email"
           placeholder="Your email here"
+          autoFocus
           value={email}
           onChange={(e) => [setEmail(e.target.value), setMessage(""), setError(false)]}
         />
@@ -66,9 +74,10 @@ export function SignInPage(e) {
           type="password"
           placeholder="Your password here"
           value={password}
+          onKeyDown={handleKeyDown}
           onChange={(e) => [setPassword(e.target.value), setMessage(""), setError(false)]}
         />
-        <Button Text="Login" onClick={handleLogin} isLoading={loading}/>
+        <Button Text="Login" type="submit" onClick={handleLogin} isLoading={loading}/>
         <C.LabelSignup>
           Don't have an account?
           <C.Strong>
