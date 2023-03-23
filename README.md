@@ -29,4 +29,4 @@ To register you only need your name, email and a password. The password must be 
 
 ### Chat
 
-!![image](https://user-images.githubusercontent.com/6215779/227083757-3cea1fcc-1d73-41f4-b5f2-5f01d54e19c4.png)
+![image](https://user-images.githubusercontent.com/6215779/227083757-3cea1fcc-1d73-41f4-b5f2-5f01d54e19c4.png)
