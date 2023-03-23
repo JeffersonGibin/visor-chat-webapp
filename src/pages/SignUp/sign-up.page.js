@@ -1,90 +1,153 @@
-import React, { useState } from "react";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import * as C from "./styles";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAccount } from "../../hooks";
+
+import Input from "../../components/Input";
+import Button from "../../components/Button";
 import Toast from "../../components/Toast";
+import { useForm } from "react-hook-form";
+import * as C from "./styles";
 
 export function SignUpPage() {
-  const { signUp } = useUserAccount();
   const navigateTo = useNavigate();
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const { signUp } = useUserAccount();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [responseServer, setResponseServer] = useState({
+    message: "",
+    status: "",
+  });
 
-  const delayRedirect = (res) => {
-    if (res.status === "SUCCESS") {
-      setTimeout(() => {
-          navigateTo("/sign-in");
-      }, 1000);
-    }
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const validations = {
+    name: {
+      required: "Field is required",
+      minLength: {
+        value: 3,
+        message: "Please enter a minimum of 3 characters",
+      },
+    },
+    email: {
+      required: "Field is required",
+    },
+    password: {
+      required: "Field is required",
+      minLength: {
+        value: 6,
+        message: "Please enter a minimum of 6 characters",
+      },
+      pattern: {
+        value: /^(?=.*[a-z])[a-z0-9]{6,}$/i,
+        message:
+          "Please, your password needs to consist of letters and numbers",
+      },
+    },
   };
 
-  const handleCreateAccount = async () => {
-    if (!name || !email | !password) {
-      setMessage("All fields required!");
-      setError(true);
-      return;
+  // When serverResponse exist effect a setTimeout to hide message
+  useEffect(() => {
+    if (responseServer.message) {
+      setTimeout(() => {
+        setResponseServer({
+          message: "",
+          status: "",
+        });
+      }, 4000);
     }
+  }, [responseServer]);
 
+  const onSubmit = async (data) => {
     setLoading(true);
 
-    await signUp(name, email, password)
+    await signUp(data.name, data.email, data.password)
       .then((res) => {
-        delayRedirect(res);
         setLoading(false);
-        setMessage(res.message);
 
-        if(res.status !== "SUCCESS"){
-          setError(true)
+        if (res.status === "SUCCESS") {
+          setResponseServer({
+            status: "SUCCESS",
+            message:
+              "User successfully created, you are being redirected login....",
+          });
+
+          setTimeout(() => {
+            navigateTo("/sign-in");
+          }, 2000);
+        } else {
+          setResponseServer({
+            status: res.status,
+            message: res.message,
+          });
         }
-      }).catch((e) => {
-  
-        setError(true)
+      })
+      .catch((e) => {
         setLoading(false);
-        setMessage(e.message);
+        setResponseServer({
+          status: "SERVER_ERROR",
+          message: "We are offline, please try again later!",
+        });
       });
-  };
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleCreateAccount();
-    }
+    reset();
   };
 
   return (
     <C.Container>
       <C.Label>Register now is free :)</C.Label>
-      {message && <Toast text={message} className={error ? "error" : "success"}/>}
-      <C.Content>
+      {responseServer.status === "SUCCESS" && (
+        <Toast text={responseServer.message} className={"success"} />
+      )}
+      {responseServer.status !== "SUCCESS" && (
+        <Toast text={responseServer.message} className={"warning"} />
+      )}
+      {responseServer.status === "SERVER_ERROR" && (
+        <Toast text={responseServer.message} className={"error"} />
+      )}
+
+      <C.Form onSubmit={handleSubmit(onSubmit)}>
         <Input
           type="text"
-          placeholder="Your name here"
-          value={name}
+          name="name"
           autoFocus={true}
-          onChange={(e) => setName(e.target.value)}
+          errors={errors}
+          placeholder="Your name is here"
+          validationSchema={validations}
+          register={register}
         />
+
         <Input
           type="email"
-          placeholder="Your email here"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          errors={errors}
+          placeholder="Your email is here"
+          validationSchema={validations}
+          register={register}
         />
+
         <Input
           type="password"
-          placeholder="Your password here"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyPress={handleKeyPress}
+          name="password"
+          placeholder="Your password is here"
+          errors={errors}
+          validationSchema={validations}
+          register={register}
         />
+
         <Button
           Text="Create Account"
-          onClick={handleCreateAccount}
+          type="submit"
+          register={register}
           isLoading={loading}
         />
         <C.LabelSignup>
@@ -93,7 +156,7 @@ export function SignUpPage() {
             <Link to="/sign-in">&nbsp;login now</Link>
           </C.Strong>
         </C.LabelSignup>
-      </C.Content>
+      </C.Form>
     </C.Container>
   );
 }

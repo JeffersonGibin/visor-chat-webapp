@@ -21,7 +21,7 @@ export const Container = styled.div`
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 `;
 
-export const Content = styled.div`
+export const Form = styled.form`
   gap: 15px;
   display: flex;
   align-items: center;
