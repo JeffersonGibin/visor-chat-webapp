@@ -17,6 +17,11 @@ export const useChat = () => {
     setServerStatus(true);
   });
 
+  socket.addEventListener("close", (event) => {
+    setWaitResponse(false);
+      setStatusResponse("The connection is closed!");
+  })
+
   /**
    * Listen Messages
    */
