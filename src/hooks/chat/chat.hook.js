@@ -27,8 +27,7 @@ export const useChat = () => {
    */
   socket.addEventListener("message", (event) => {
     const response = JSON.parse(event.data);
-    console.log(response);
-
+    
     if (!response?.status) {
       setWaitResponse(false);
       setStatusResponse("Error");

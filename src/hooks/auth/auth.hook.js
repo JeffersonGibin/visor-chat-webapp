@@ -41,8 +41,6 @@ export const useAuth = () => {
     if(localStorageSession){
       localStorage.removeItem("session");
       navigateTo("/sign-in");
-
-      console.log("You left!")
     }
   }, [navigateTo]);
 

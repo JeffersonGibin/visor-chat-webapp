@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
 
   const whenTokenMissingRedirectTo = useCallback(
     (toPage) => {
-      console.log(session)
       if (!session?.token && currentPage === "/home") {
         console.info("You were redirected to 'sign-in' because haven't token!");
         navigateTo(toPage);
