@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { getTime } from "./time.js";
 
 import Input from "../../components/Input";
@@ -17,6 +17,7 @@ export function HomePage() {
     formState: { errors },
   } = useForm();
 
+  const messageRef = useRef();
   const { getSession, logoff } = useAuth();
   const [error, setError] = useState("");
   const [messages, setMessageInList] = useState([
@@ -45,7 +46,9 @@ export function HomePage() {
 
   const session = getSession();
 
-  console.log(responseMessageAISocket.message?.text);
+  const scrollToBottom = () => {
+    messageRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // When status is Success
   useEffect(() => {
@@ -59,6 +62,10 @@ export function HomePage() {
           },
         ])
       );
+
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,6 +121,7 @@ export function HomePage() {
       <C.Display>
         {messages.map((item, index) => (
           <C.Message
+            ref={item.who === "AI" ? messageRef : null}
             key={index}
             position={item.who === "AI" ? "left" : "right"}
           >
@@ -136,14 +144,13 @@ export function HomePage() {
             validationSchema={validations}
             register={register}
           />
-          
+
           <Button
             Text="Send"
             type="submit"
             isLoading={waitResponseSocket}
             disabled={!isOnlineSocket}
           />
-          
         </C.Form>
       </C.Footer>
     </C.Container>
