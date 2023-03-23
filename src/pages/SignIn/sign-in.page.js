@@ -24,10 +24,21 @@ export function SignInPage(e) {
   } = useForm();
 
   const validations = {
-    required: "Field is required",
-    minLength: {
-      value: 3,
-      message: "Please enter a minimum of 3 characters",
+    email: {
+      required: "Field is required",
+    },
+
+    password: {
+      required: "Field is required",
+      minLength: {
+        value: 6,
+        message: "Please enter a minimum of 6 characters",
+      },
+      pattern: {
+        value: /^(?=.*[a-z])[a-z0-9]{6,}$/i,
+        message:
+          "Please, your password needs to consist of letters and numbers",
+      },
     },
   };
 
@@ -53,10 +64,12 @@ export function SignInPage(e) {
         if (res.status === "SUCCESS") {
           setResponseServer({
             status: "SUCCESS",
-            message: "Sucessfully, you go redirectin....",
+            message: "Login successfully, you are being redirected...",
           });
 
-          navigateTo("/home");
+          setTimeout(() => {
+            navigateTo("/home");
+          }, 2000);
         } else {
           setResponseServer({
             status: res.status,
@@ -90,7 +103,7 @@ export function SignInPage(e) {
 
       <C.Form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          type="text"
+          type="email"
           name="email"
           autoFocus={true}
           errors={errors}

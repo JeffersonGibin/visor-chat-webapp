@@ -2,15 +2,11 @@ import React, { Fragment } from "react";
 import * as C from "./styles";
 
 const Input = (props) => {
-
-  const validation = props.validationSchema[props.name];
-
-  console.log(validation);
-
+  const validation = props.name && props.validationSchema[props.name];
 
   return (
     <Fragment>
-      <C.ContainerField>
+      <C.ContainerField className="container-field">
         <C.Input
           id={props.name}
           name={props.name}

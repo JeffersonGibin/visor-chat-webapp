@@ -41,7 +41,7 @@ export const Header = styled.div`
   background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50);
   background: linear-gradient(to right, #4ca1af, #4ca1af);
 
-  @media (max-width: 500px) {
+  @media (max-width: 880px) {
     margin-top: 0px;
     max-height: 100px;
   }
@@ -166,12 +166,54 @@ export const Footer = styled.div`
   padding-top: 25px;
   padding-bottom: 25px;
 
-  @media (max-width: 500px) {
-    width: 100%;
+
+  @media (max-width: 880px) {
+    padding-top: 20px;
+    margin-bottom: 0px;
+    border-bottom: none;
+  }
+`;
+
+
+export const Form = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+
+  @media (max-width: 880px) {
     display: flex;
     flex-direction: column;
-    background-color: rgb(255, 255, 255);
-    padding-top: 0px;
+    justify-content: center;
+    align-items: center;
+    margin: 15px
+  }
+
+  & .container-field {
+    max-width: 700px;
+    min-width: 200px;
+
+    @media (max-width: 880px) {
+      align-items: center;
+    }
+    
+  }
+
+  & .container-field > input {
+    outline: none;
+    padding: 16px 0px;
+    width: 100%;
+    border-radius: 32px;
+    border-width: 1px;
+    text-indent: 22px;
+    height: 25px;
+    border: 1px solid #aaa;
+    border-radius: 8px 0px 0px 8px;
+    border-right: none;
+
+    @media (max-width: 880px) {
+      border: none;
+    }
   }
 
   & button {
@@ -182,35 +224,15 @@ export const Footer = styled.div`
     border: 5px solid #4ca1af;
     color: #fff;
 
-    @media (max-width: 500px) {
+    @media (max-width: 880px) {
+      display: flex;
       width: 100%;
-      margin-top: 10px;
-      border-radius: 0px ;
+      justify-content: center;
+      border-radius: 5px;
+      max-width: 750px;
     }
   }
-
-  & input {
-    outline: none;
-    padding: 16px 0px;
-    width: 100%;
-    border-radius: 32px;
-    border-width: 1px;
-    text-indent: 22px;
-    height: 25px;
-    border: 1px solid #aaa;
-    max-width: 700px;
-    min-width: 200px;
-    border-radius: 8px 0px 0px 8px;
-    border-right: none;
-
-    @media (max-width: 500px) {
-      min-width: 80px;
-      border: none;
-      border-radius: 0px;
-      width: 100%;
-    }
-  }
-`;
+`
 
 export const Display = styled.div`
   gap: 15px;

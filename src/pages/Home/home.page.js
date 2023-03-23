@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getTime } from "./time.js";
 
 import Input from "../../components/Input";
@@ -7,9 +7,16 @@ import Toast from "../../components/Toast";
 
 import * as C from "./styles.js";
 import { useChat, useAuth } from "../../hooks";
+import { useForm } from "react-hook-form";
 
 export function HomePage() {
-  const [text, setText] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
   const { getSession, logoff } = useAuth();
   const [error, setError] = useState("");
   const [messages, setMessageInList] = useState([
@@ -23,27 +30,37 @@ export function HomePage() {
   const {
     isOnlineSocket,
     waitResponseSocket,
-    responseMessageAISocket,
     sendMesseToAI,
     statusResponseSocket,
+    responseMessageAISocket,
   } = useChat();
+
+  const validations = {
+    required: "Field is required",
+    minLength: {
+      value: 3,
+      message: "Please enter a minimum of 3 characters",
+    },
+  };
+
   const session = getSession();
 
-  // Effect When message is change
+  console.log(responseMessageAISocket.message?.text);
+
+  // When status is Success
   useEffect(() => {
     if (responseMessageAISocket) {
       setMessageInList(
         messages.concat([
           {
-            text:
-              responseMessageAISocket.message.text ??
-              "I am not response now. =/",
+            text: responseMessageAISocket.message?.text ?? "",
             date: new Date().toISOString(),
             who: "AI",
           },
         ])
       );
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseMessageAISocket]);
 
@@ -52,41 +69,26 @@ export function HomePage() {
     if (statusResponseSocket === "Error") {
       setError("The server is loaded. try again!");
     }
-
   }, [statusResponseSocket]);
 
-  const sleap = () => {
-    setTimeout(() => {
-      setError("")
-    }, 2000)
-  }
-  
-  // Send Message
-  const sendMessage = () => {
-    if(text.length < 3){
-      setError("You need to submit at least 3 characters.")
-      sleap();
-      
-      return false;
+  const onSubmit = async (data) => {
+    // print message user
+    if (data.message) {
+      setMessageInList(
+        messages.concat([
+          {
+            text: data.message,
+            date: new Date().toISOString(),
+            who: "USER",
+          },
+        ])
+      );
     }
-    
 
-    sendMesseToAI(text);
-    setMessageInList(
-      messages.concat([
-        {
-          text,
-          date: new Date().toISOString(),
-          who: "USER",
-        },
-      ])
-    );
-  };
+    sendMesseToAI(data.message);
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" && !waitResponseSocket) {
-      sendMessage();
-    }
+    // reset field
+    reset();
   };
 
   return (
@@ -101,7 +103,7 @@ export function HomePage() {
 
         <C.ContentHeaderRight>
           <C.Welcome>
-            <span>Hello, {session.name}</span>
+            <span>Hello, {session?.name}</span>
           </C.Welcome>
           <C.Logoff>
             <button onClick={() => logoff()}>Log out</button>
@@ -124,21 +126,25 @@ export function HomePage() {
       {error && <Toast text={error} className="error" />}
 
       <C.Footer>
-        <Input
-          type="text"
-          placeholder="Write your message"
-          value={text}
-          autoFocus={true}
-          // disabled={!isOnline}
-          onChange={(e) => setText(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        <Button
-          Text="Send"
-          onClick={sendMessage}
-          isLoading={waitResponseSocket}
-          disabled={!isOnlineSocket}
-        />
+        <C.Form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            type="text"
+            name="message"
+            placeholder="Write your message"
+            errors={errors}
+            autoFocus={true}
+            validationSchema={validations}
+            register={register}
+          />
+          
+          <Button
+            Text="Send"
+            type="submit"
+            isLoading={waitResponseSocket}
+            disabled={!isOnlineSocket}
+          />
+          
+        </C.Form>
       </C.Footer>
     </C.Container>
   );
