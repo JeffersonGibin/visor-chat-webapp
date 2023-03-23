@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
   const navigateTo = useNavigate();
   const instanceConfig = new Config();
-  
+
   const session = JSON.parse(localStorage.getItem("session"));
   const currentPage = location.pathname;
 
@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   const whenTokenMissingRedirectTo = useCallback(
     (toPage) => {
+      console.log(session)
       if (!session?.token && currentPage === "/home") {
         console.info("You were redirected to 'sign-in' because haven't token!");
         navigateTo(toPage);
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   // Effect When token Missing
   useEffect(() => {
-    whenTokenMissingRedirectTo("/sign-in");
+    whenTokenMissingRedirectTo("/");
   }, [whenTokenMissingRedirectTo]);
 
   // Effect When token Exist
@@ -48,6 +49,8 @@ export const AuthProvider = ({ children }) => {
   const socket = new WebSocket(instanceConfig.configs.SOCKET_URL);
 
   return (
-    <AuthContext.Provider value={{ session, socket }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ session, socket }}>
+      {children}
+    </AuthContext.Provider>
   );
 };

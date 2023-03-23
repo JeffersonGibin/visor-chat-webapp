@@ -12,7 +12,13 @@ export function HomePage() {
   const [text, setText] = useState("");
   const { getSession, logoff } = useAuth();
   const [error, setError] = useState("");
-  const [messages, setMessageInList] = useState([]);
+  const [messages, setMessageInList] = useState([
+    {
+      text: "Hello! How may I assist you today?",
+      date: new Date().toISOString(),
+      who: "AI",
+    },
+  ]);
 
   const {
     isOnlineSocket,
@@ -45,15 +51,26 @@ export function HomePage() {
   useEffect(() => {
     if (statusResponseSocket === "Error") {
       setError("The server is loaded. try again!");
-      setTimeout(() => {setError("")}, 4000);
     }
 
   }, [statusResponseSocket]);
 
+  const sleap = () => {
+    setTimeout(() => {
+      setError("")
+    }, 2000)
+  }
+  
   // Send Message
   const sendMessage = () => {
+    if(text.length < 3){
+      setError("You need to submit at least 3 characters.")
+      sleap();
+      
+      return false;
+    }
+    
 
-    setText(""); // Clear field
     sendMesseToAI(text);
     setMessageInList(
       messages.concat([
@@ -67,7 +84,7 @@ export function HomePage() {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && !waitResponseSocket && text.length > 4) {
+    if (event.key === "Enter" && !waitResponseSocket) {
       sendMessage();
     }
   };
@@ -81,14 +98,14 @@ export function HomePage() {
             <div>{isOnlineSocket ? "Online" : "Offiline"}</div>
           </C.ServerStatus>
         </C.ContentHeaderLeft>
-      
+
         <C.ContentHeaderRight>
           <C.Welcome>
             <span>Hello, {session.name}</span>
           </C.Welcome>
-          <C.Logout>
+          <C.Logoff>
             <button onClick={() => logoff()}>Log out</button>
-          </C.Logout>
+          </C.Logoff>
         </C.ContentHeaderRight>
       </C.Header>
 
@@ -104,7 +121,7 @@ export function HomePage() {
         ))}
       </C.Display>
 
-      {error && <Toast text={error  } className="error" />}
+      {error && <Toast text={error} className="error" />}
 
       <C.Footer>
         <Input

@@ -31,11 +31,20 @@ export const Header = styled.div`
   gap: 15px;
   display: flex;
   width: 100%;
-  box-shadow: 0 1px 3px #0003;
   max-width: 1024px;
   border-radius: 5px 5px 0px 0px;
-  height: 100px;
-  background: #1d3345;
+  max-height: 125px;
+  height: 100%;
+  background: rgb(29, 51, 69);
+  margin-top: 10px;
+  background: #2c3e50;
+  background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50);
+  background: linear-gradient(to right, #4ca1af, #4ca1af);
+
+  @media (max-width: 500px) {
+    margin-top: 0px;
+    max-height: 100px;
+  }
 `;
 
 export const Welcome = styled.div`
@@ -44,14 +53,14 @@ export const Welcome = styled.div`
   font-weight: bold;
   margin-right: 20px;
 `;
-export const Logout = styled.div`
+export const Logoff = styled.div`
   margin-right: 20px;
 
   & button {
     color: #ffffff;
     border-radius: 5px;
     border: none;
-    background: #c56e6e;
+    background: #508b95;
     font-size: 12px;
     padding: 5px;
     margin-right: 20px;
@@ -99,14 +108,17 @@ export const Message = styled.div`
   align-self: ${(props) =>
     props.position === "left" ? "flex-start" : "flex-end"};
 
-  background: ${(props) => (props.position === "left" ? "#f3f6f6" : "#5e8c8c")};
+  background: ${(props) => (props.position === "left" ? "#f3f6f6" : "#e7f6f6")};
 
   padding: ${(props) => (props.position === "left" ? "10px 40px" : "10px")};
 
   border-radius: ${(props) =>
     props.position === "left" ? "25px 15px 20px 0px" : "15px 25px 0px 20px"};
-  color: ${(props) => (props.position === "left" ? "#1d3345" : "#ffffff")};
+  color: ${(props) => (props.position === "left" ? "#1d3345" : "#1d3345")};
+  border: 1px solid
+    ${(props) => (props.position === "left" ? "#CCC" : "#69bcca")};
 
+  /** fade-in message */
   animation: fadeInAnimation ease 2s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
@@ -136,7 +148,7 @@ export const Message = styled.div`
     align-items: flex-end;
     font-weight: bold;
     font-size: 12px;
-    color: #fff;
+    color: ${(props) => (props.position === "left" ? "#1d3345" : "#1d3345")};
   }
 `;
 
@@ -149,21 +161,54 @@ export const Footer = styled.div`
   -webkit-box-align: center;
   align-items: center;
   margin-bottom: 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding-top: 25px;
+  padding-bottom: 25px;
+
+  @media (max-width: 500px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    padding-top: 0px;
+  }
 
   & button {
-    width: 115px;
-    height: 60px;
+    width: 125px;
+    height: 59px;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #4ca1af;
+    border: 5px solid #4ca1af;
+    color: #fff;
+
+    @media (max-width: 500px) {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 0px ;
+    }
   }
 
   & input {
     outline: none;
     padding: 16px 0px;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 32px;
     border-width: 1px;
     text-indent: 22px;
-    margin-right: 10px;
     height: 25px;
+    border: 1px solid #aaa;
+    max-width: 700px;
+    min-width: 200px;
+    border-radius: 8px 0px 0px 8px;
+    border-right: none;
+
+    @media (max-width: 500px) {
+      min-width: 80px;
+      border: none;
+      border-radius: 0px;
+      width: 100%;
+    }
   }
 `;
 
@@ -177,7 +222,6 @@ export const Display = styled.div`
   background-color: #fff;
   max-width: 1024px;
   overflow-y: auto;
-  min-height: 590px;
   height: 100%;
   padding-top: 20px;
   padding-bottom: 40px;
@@ -197,23 +241,7 @@ export const Content = styled.div`
   border-radius: 5px;
 `;
 
-export const Label = styled.label`
-  font-size: 30px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 25px;
-`;
-
 export const LabelSignup = styled.label`
   font-size: 16px;
   color: #1d3444;
-`;
-
-export const Strong = styled.strong`
-  cursor: pointer;
-
-  a {
-    text-decoration: none;
-    color: #1d3444;
-  }
 `;
