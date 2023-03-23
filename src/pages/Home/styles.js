@@ -55,8 +55,10 @@ export const Welcome = styled.div`
 `;
 export const Logoff = styled.div`
   margin-right: 20px;
-
+  
   & button {
+    
+    cursor: pointer;
     color: #ffffff;
     border-radius: 5px;
     border: none;
