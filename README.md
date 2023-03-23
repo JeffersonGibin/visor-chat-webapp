@@ -27,6 +27,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 To register you only need your name, email and a password. The password must be 6 characters long and must consist of numbers and lowercase letters.
 
 
-### Home
+### Chat
 
-![image](https://user-images.githubusercontent.com/6215779/227003388-ea2ceb44-538e-4354-b913-6f5c82f68165.png)
+!![image](https://user-images.githubusercontent.com/6215779/227083757-3cea1fcc-1d73-41f4-b5f2-5f01d54e19c4.png)
