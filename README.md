@@ -1,5 +1,7 @@
 # Visor Web App.
 
+## What is this project ?
+
 This repository is the front-end of a chat that was developed to participate in the Visor.ai selection process. For more information about the project, [visit here](https://github.com/JeffersonGibin/visor-challenge)
 
 
@@ -7,7 +9,9 @@ This repository is the front-end of a chat that was developed to participate in 
 
 In the project directory, you can run:
 
-### `npm start`
+```shell
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -30,3 +34,9 @@ To register you only need your name, email and a password. The password must be 
 ### Chat
 
 ![image](https://user-images.githubusercontent.com/6215779/227083757-3cea1fcc-1d73-41f4-b5f2-5f01d54e19c4.png)
+
+
+## Tecnologies
+- React.js
+- Styled Components
+- React-hook-form
