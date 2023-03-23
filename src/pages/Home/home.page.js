@@ -76,6 +76,10 @@ export function HomePage() {
     if (statusResponseSocket === "Error") {
       setError("The server is loaded. try again!");
     }
+
+    setTimeout(() => {
+      setError("");
+    }, 2000);
   }, [statusResponseSocket]);
 
   const onSubmit = async (data) => {
