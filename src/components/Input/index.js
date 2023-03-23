@@ -2,6 +2,12 @@ import React, { Fragment } from "react";
 import * as C from "./styles";
 
 const Input = (props) => {
+
+  const validation = props.validationSchema[props.name];
+
+  console.log(validation);
+
+
   return (
     <Fragment>
       <C.ContainerField>
@@ -10,7 +16,7 @@ const Input = (props) => {
           name={props.name}
           type={props.type}
           className={props.errors && props.errors[props.name]?.message ? "required" : ""}
-          {...props?.register && {...props.register(props.name, props.validationSchema)}}
+          {...props?.register && {...props.register(props.name, validation)}}
           {...props}
         />
 
