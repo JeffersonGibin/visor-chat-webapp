@@ -121,7 +121,7 @@ export function HomePage() {
       <C.Display>
         {messages.map((item, index) => (
           <C.Message
-            ref={item.who === "AI" ? messageRef : null}
+            ref={messageRef}
             key={index}
             position={item.who === "AI" ? "left" : "right"}
           >
