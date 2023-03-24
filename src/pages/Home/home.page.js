@@ -72,7 +72,10 @@ export function HomePage() {
             <span>Hello, {getSession()?.name}</span>
           </C.Welcome>
           <C.Logoff>
-            <button onClick={() => logoff()}>Log out</button>
+            <button onClick={() => {
+              methods.disconnect();
+              logoff();
+            }}>Log out</button>
           </C.Logoff>
         </C.ContentHeaderRight>
       </C.Header>

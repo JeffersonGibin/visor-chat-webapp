@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { createUserService } from "../../services/create-user.service";
 
 export const useUserAccount = () => {
-  const validateErrors = (code) => {
+  const normalizeMessageError = (code) => {
     return (
       {
         InvalidPasswordException:
@@ -32,7 +32,7 @@ export const useUserAccount = () => {
 
         return {
           status: result.code,
-          message: validateErrors(result.code),
+          message: normalizeMessageError(result.code),
         };
       }
     });

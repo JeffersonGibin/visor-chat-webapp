@@ -17,7 +17,7 @@ export const useSocket = () => {
   });
 
   socket.addEventListener("close", (event) => {
-    setStatusResponse("Connect Close");
+    setServerStatus(false);
   });
 
   /**

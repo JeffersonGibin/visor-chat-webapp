@@ -37,7 +37,7 @@ export const useChat = () => {
   }, [responseMessage]);
 
   /**
-   * Send message t
+   * Public messege user in the array list
    */
   const userPublicMessage = useCallback(
     (message) => {
@@ -72,6 +72,10 @@ export const useChat = () => {
     [socket]
   );
 
+  const disconnect = useCallback(() => {
+    socket.close();
+  }, [socket]);
+
   return {
     states: {
       messages,
@@ -83,6 +87,7 @@ export const useChat = () => {
     methods: {
       sendMessageToAI,
       userPublicMessage,
+      disconnect,
     },
   };
 };
