@@ -57,6 +57,7 @@ export const Logoff = styled.div`
   margin-right: 20px;
 
   & button {
+    cursor: pointer;
     color: #ffffff;
     border-radius: 5px;
     border: none;
@@ -166,7 +167,6 @@ export const Footer = styled.div`
   padding-top: 25px;
   padding-bottom: 25px;
 
-
   @media (max-width: 880px) {
     padding-top: 20px;
     margin-bottom: 0px;
@@ -174,19 +174,17 @@ export const Footer = styled.div`
   }
 `;
 
-
 export const Form = styled.form`
   width: 100%;
   display: flex;
   justify-content: center;
-
 
   @media (max-width: 880px) {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 15px
+    margin: 15px;
   }
 
   & .container-field {
@@ -196,7 +194,6 @@ export const Form = styled.form`
     @media (max-width: 880px) {
       align-items: center;
     }
-    
   }
 
   & .container-field > input {
@@ -232,7 +229,7 @@ export const Form = styled.form`
       max-width: 750px;
     }
   }
-`
+`;
 
 export const Display = styled.div`
   gap: 15px;
