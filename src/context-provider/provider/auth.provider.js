@@ -16,9 +16,6 @@ export const AuthProvider = ({ children }) => {
       const routes = ["/sign-in", "/sign-up", "/"];
 
       if (session?.token != null && routes.includes(currentPage)) {
-        console.info(
-          `You were redirected to home because is in the ----> ${currentPage}`
-        );
         navigateTo(toPage);
       }
     },
@@ -28,7 +25,6 @@ export const AuthProvider = ({ children }) => {
   const whenTokenMissingRedirectTo = useCallback(
     (toPage) => {
       if (!session?.token && currentPage === "/home") {
-        console.info("You were redirected to 'sign-in' because haven't token!");
         navigateTo(toPage);
       }
     },
