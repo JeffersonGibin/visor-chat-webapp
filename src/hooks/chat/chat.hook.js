@@ -1,68 +1,88 @@
-import { useCallback, useContext, useState } from "react";
-import { AuthContext } from "../../context-provider/context/auth.context.js";
+import { useCallback, useEffect, useState } from "react";
+import { useSocket } from "../socket/socket.hook.js";
 
 export const useChat = () => {
-  const [isOnlineSocket, setServerStatus] = useState(false);
-  const [waitResponseSocket, setWaitResponse] = useState(false);
-  const [statusResponseSocket, setStatusResponse] = useState("");
-  const [responseMessageAISocket, setResponseMessageAI] = useState("");
+  const messageDefault = {
+    text: "Hello! How may I assist you today?",
+    date: new Date().toISOString(),
+    who: "AI",
+  };
 
-  const context = useContext(AuthContext);
-  const socket = context.socket;
+  const {
+    states: { isOnline, responseMessage, statusResponse },
+    socket,
+  } = useSocket();
 
-  /**
-   * Server Open
-   */
-  socket.addEventListener("open", (event) => {
-    setServerStatus(true);
-  });
+  const [waitResponse, setWaitResponse] = useState(false);
+  const [messages, setMessages] = useState([messageDefault]);
 
-  socket.addEventListener("close", (event) => {
+  useEffect(() => {
     setWaitResponse(false);
-      setStatusResponse("The connection is closed!");
-  })
+  }, [responseMessage]);
+
+  // When status is Success
+  useEffect(() => {
+    if (responseMessage.message) {
+      setMessages(
+        messages.concat([
+          {
+            text: responseMessage.message?.text ?? "",
+            date: new Date().toISOString(),
+            who: "AI",
+          },
+        ])
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [responseMessage]);
 
   /**
-   * Listen Messages
+   * Send message t
    */
-  socket.addEventListener("message", (event) => {
-    const response = JSON.parse(event.data);
-    
-    if (!response?.status) {
-      setWaitResponse(false);
-      setStatusResponse("Error");
-    }
-
-    if (response.status === "Success") {
-      setStatusResponse(response.status);
-      setWaitResponse(false);
-      setResponseMessageAI(response);
-    } else {
-      setStatusResponse("Error");
-    }
-  });
+  const userPublicMessage = useCallback(
+    (message) => {
+      setMessages(
+        messages.concat([
+          {
+            text: message,
+            date: new Date().toISOString(),
+            who: "USER",
+          },
+        ])
+      );
+    },
+    [messages]
+  );
 
   /**
    * Send message to IA with socket
    */
-  const sendMesseToAI = useCallback(
+  const sendMessageToAI = useCallback(
     (message) => {
       setWaitResponse(true);
 
-      const payload = JSON.stringify({
+      const messagePayloadSocket = JSON.stringify({
         action: "sendMessage",
         message,
       });
-      context.socket.send(payload);
+
+      socket.send(messagePayloadSocket);
     },
-    [context.socket]
+
+    [socket]
   );
 
   return {
-    sendMesseToAI,
-    isOnlineSocket,
-    waitResponseSocket,
-    statusResponseSocket,
-    responseMessageAISocket,
+    states: {
+      messages,
+      isOnline,
+      waitResponse,
+      statusResponse,
+      responseMessage,
+    },
+    methods: {
+      sendMessageToAI,
+      userPublicMessage,
+    },
   };
 };

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getTime } from "./time.js";
 
 import Input from "../../components/Input";
@@ -6,7 +6,7 @@ import Button from "../../components/Button";
 import Toast from "../../components/Toast";
 
 import * as C from "./styles.js";
-import { useChat, useAuth } from "../../hooks";
+import { useChat, useAuth, useScrollSmooth } from "../../hooks";
 import { useForm } from "react-hook-form";
 
 export function HomePage() {
@@ -17,24 +17,26 @@ export function HomePage() {
     formState: { errors },
   } = useForm();
 
-  const messageRef = useRef();
-  const { getSession, logoff } = useAuth();
+  const { methods, states } = useChat();
   const [error, setError] = useState("");
-  const [messages, setMessageInList] = useState([
-    {
-      text: "Hello! How may I assist you today?",
-      date: new Date().toISOString(),
-      who: "AI",
-    },
-  ]);
+  const { getSession, logoff } = useAuth();
+  const { messageRef, scrollToBottom } = useScrollSmooth();
 
-  const {
-    isOnlineSocket,
-    waitResponseSocket,
-    sendMesseToAI,
-    statusResponseSocket,
-    responseMessageAISocket,
-  } = useChat();
+  // When status is error
+  useEffect(() => {
+    if (states.responseMessage.status === "Error") {
+      setError("The server is loaded. try again!");
+    }
+
+    setTimeout(() => {
+      setError("");
+    }, 2000);
+  }, [states.responseMessage.status]);
+
+  // When response effect then scrollToBottom
+  useEffect(() => {
+    scrollToBottom();
+  }, [scrollToBottom, states.waitResponse]);
 
   const validations = {
     required: "Field is required",
@@ -44,62 +46,15 @@ export function HomePage() {
     },
   };
 
-  const session = getSession();
-
-  const scrollToBottom = () => {
-    messageRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // When status is Success
-  useEffect(() => {
-    if (responseMessageAISocket) {
-      setMessageInList(
-        messages.concat([
-          {
-            text: responseMessageAISocket.message?.text ?? "",
-            date: new Date().toISOString(),
-            who: "AI",
-          },
-        ])
-      );
-
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseMessageAISocket]);
-
-  // When status is error
-  useEffect(() => {
-    if (statusResponseSocket === "Error") {
-      setError("The server is loaded. try again!");
-    }
-
-    setTimeout(() => {
-      setError("");
-    }, 2000);
-  }, [statusResponseSocket]);
-
   const onSubmit = async (data) => {
-    // print message user
-    if (data.message) {
-      setMessageInList(
-        messages.concat([
-          {
-            text: data.message,
-            date: new Date().toISOString(),
-            who: "USER",
-          },
-        ])
-      );
+    reset();
+
+    if (!data.message) {
+      data.preventDefault();
     }
 
-    sendMesseToAI(data.message);
-
-    // reset field
-    reset();
+    methods.userPublicMessage(data.message);
+    methods.sendMessageToAI(data.message);
   };
 
   return (
@@ -107,14 +62,14 @@ export function HomePage() {
       <C.Header>
         <C.ContentHeaderLeft>
           <C.ServerStatus>
-            <C.CicleOnline status={isOnlineSocket} />
-            <div>{isOnlineSocket ? "Online" : "Offiline"}</div>
+            <C.CicleOnline status={states.isOnline} />
+            <div>{states.isOnline ? "Online" : "Offiline"}</div>
           </C.ServerStatus>
         </C.ContentHeaderLeft>
 
         <C.ContentHeaderRight>
           <C.Welcome>
-            <span>Hello, {session?.name}</span>
+            <span>Hello, {getSession()?.name}</span>
           </C.Welcome>
           <C.Logoff>
             <button onClick={() => logoff()}>Log out</button>
@@ -123,7 +78,7 @@ export function HomePage() {
       </C.Header>
 
       <C.Display>
-        {messages.map((item, index) => (
+        {states.messages.map((item, index) => (
           <C.Message
             ref={messageRef}
             key={index}
@@ -152,8 +107,8 @@ export function HomePage() {
           <Button
             Text="Send"
             type="submit"
-            isLoading={waitResponseSocket}
-            disabled={!isOnlineSocket}
+            isLoading={states.waitResponse}
+            disabled={!states.isOnline}
           />
         </C.Form>
       </C.Footer>
